@@ -174,7 +174,10 @@ const App: React.FC = () => {
                 <Cpu size={24} className="text-white" />
               </div>
               <div>
-                <h2 className="font-black text-lg md:text-xl mb-1">🚀 Want AI-Powered Analysis?</h2>
+                <h2 className="font-black text-lg md:text-xl mb-1">
+                  <span aria-hidden="true">🚀 </span>
+                  Want AI-Powered Analysis?
+                </h2>
                 <p className="text-blue-100 text-sm md:text-base">
                   Get intelligent page summaries and keyword extraction with our full app!
                 </p>
