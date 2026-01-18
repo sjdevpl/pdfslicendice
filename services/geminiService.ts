@@ -6,7 +6,6 @@ export const analyzePage = async (imageUri: string): Promise<AnalysisResult> => 
     throw new Error("AI features are not available in this version. Please visit https://pdfslicendice.sjdev.pl for the full app.");
   }
   
-  const ai = new GoogleGenAI({ apiKey: import.meta.env.VITE_GEMINI_API_KEY });
   // Get backend URL from environment variable or use default
   const backendUrl = import.meta.env.VITE_BACKEND_URL || 'http://localhost:3001';
   
