@@ -30,7 +30,7 @@ export const loadPdf = async (file: File): Promise<PdfPageInfo[]> => {
     const [copiedPage] = await subDoc.copyPages(pdfDoc, [i]);
     subDoc.addPage(copiedPage);
     const pdfBytes = await subDoc.save();
-    const pdfBlob = new Blob([pdfBytes], { type: 'application/pdf' });
+    const pdfBlob = new Blob([new Uint8Array(pdfBytes)], { type: 'application/pdf' });
 
     const page = await pdfjsDoc.getPage(i + 1);
     const viewport = page.getViewport({ scale: 0.5 });
@@ -39,7 +39,7 @@ export const loadPdf = async (file: File): Promise<PdfPageInfo[]> => {
     if (context) {
       canvas.height = viewport.height;
       canvas.width = viewport.width;
-      await page.render({ canvasContext: context, viewport }).promise;
+      await page.render({ canvasContext: context, viewport, canvas }).promise;
       const thumbnail = canvas.toDataURL('image/png');
       
       pages.push({
@@ -66,7 +66,7 @@ export const convertToImage = async (pdfBlob: Blob): Promise<string> => {
   
   canvas.height = viewport.height;
   canvas.width = viewport.width;
-  await page.render({ canvasContext: context, viewport }).promise;
+  await page.render({ canvasContext: context, viewport, canvas }).promise;
   return canvas.toDataURL('image/png');
 };
 
@@ -82,6 +82,7 @@ export const convertToWord = async (imageUri: string): Promise<Blob> => {
             children: [
               new ImageRun({
                 data: buffer,
+                type: 'png',
                 transformation: {
                   width: 600,
                   height: 800,
@@ -101,8 +102,8 @@ export const convertToPptx = async (imageUri: string): Promise<Blob> => {
   const pres = new pptxgen();
   const slide = pres.addSlide();
   slide.addImage({ data: imageUri, x: 0, y: 0, w: '100%', h: '100%' });
-  const buffer = await pres.write('arraybuffer');
-  return new Blob([buffer as ArrayBuffer], { type: 'application/vnd.openxmlformats-officedocument.presentationml.presentation' });
+  const buffer = await pres.write({ outputType: 'arraybuffer' }) as ArrayBuffer;
+  return new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.presentationml.presentation' });
 };
 
 export const downloadBlob = (blob: Blob, filename: string) => {
