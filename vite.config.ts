@@ -13,7 +13,17 @@ export default defineConfig({
   },
   build: {
     outDir: 'dist',
-    target: 'esnext'
+    target: 'esnext',
+    assetsDir: 'assets',
+    // Ensure assets are properly referenced with base path
+    rollupOptions: {
+      output: {
+        // Ensure consistent asset naming
+        assetFileNames: 'assets/[name].[hash][extname]',
+        chunkFileNames: 'assets/[name].[hash].js',
+        entryFileNames: 'assets/[name].[hash].js',
+      },
+    },
   },
   optimizeDeps: {
     include: ['pdfjs-dist']
