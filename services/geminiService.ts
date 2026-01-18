@@ -17,7 +17,9 @@ export const analyzePage = async (imageUri: string): Promise<AnalysisResult> => 
 
     if (!response.ok) {
       const errorData = await response.json().catch(() => ({}));
-      throw new Error(errorData.message || `Server error: ${response.status}`);
+      throw new Error(
+        errorData.message || `Failed to analyze image: Server error ${response.status}`
+      );
     }
 
     const result = await response.json();
