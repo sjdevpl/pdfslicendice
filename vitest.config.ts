@@ -5,6 +5,8 @@ export default defineConfig({
   plugins: [react()],
   test: {
     globals: true,
+    // Default to jsdom for unit tests
+    // Browser tests will be run with --browser.enabled flag
     environment: 'jsdom',
     setupFiles: './vitest.setup.ts',
     css: true,
