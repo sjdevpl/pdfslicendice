@@ -2,7 +2,8 @@ import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 
 // Repository name for GitHub Pages base path
-const REPO_NAME = 'Pdfslicendice';
+// Note: Must match the actual repository name exactly (case-sensitive)
+const REPO_NAME = 'pdfslicendice';
 
 // https://vitejs.dev/config/
 export default defineConfig({

@@ -10,7 +10,7 @@ The GitHub Actions workflow (`.github/workflows/deploy.yml`) is already configur
 
 ### 1. Enable GitHub Pages
 
-1. Go to your repository on GitHub: `https://github.com/sjdevpl/Pdfslicendice`
+1. Go to your repository on GitHub: `https://github.com/sjdevpl/pdfslicendice`
 2. Click on **Settings** (top menu)
 3. In the left sidebar, click on **Pages** (under "Code and automation")
 4. Under **Source**, select **GitHub Actions** (not "Deploy from a branch")
@@ -33,7 +33,7 @@ Merge this PR to the `main` branch, and the workflow will automatically run.
 
 After the workflow completes successfully (usually takes 2-3 minutes):
 
-- Your app will be available at: `https://sjdevpl.github.io/Pdfslicendice/`
+- Your app will be available at: `https://sjdevpl.github.io/pdfslicendice/`
 - Check the workflow run for the exact URL in the deployment step
 
 ## Features in GitHub Pages Version
