@@ -49,5 +49,5 @@ Current tests cover:
 
 ## CI/CD
 
-Tests are automatically run on every push and pull request via GitHub Actions.
+Tests are automatically run on every push to `main` and on pull requests via GitHub Actions.
 See `.github/workflows/ci.yml` for the CI configuration.
