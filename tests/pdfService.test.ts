@@ -35,16 +35,21 @@ describe('pdfService - downloadBlob', () => {
     
     let capturedAnchor: HTMLAnchorElement | null = null;
     const originalAppendChild = document.body.appendChild;
-    document.body.appendChild = vi.fn((node) => {
-      capturedAnchor = node as HTMLAnchorElement;
-      return originalAppendChild.call(document.body, node);
-    });
-    
-    downloadBlob(mockBlob, filename);
-    
-    expect(capturedAnchor).not.toBeNull();
-    expect(capturedAnchor?.download).toBe(filename);
-    expect(capturedAnchor?.href).toContain('mock-url');
+
+    try {
+      document.body.appendChild = vi.fn((node) => {
+        capturedAnchor = node as HTMLAnchorElement;
+        return originalAppendChild.call(document.body, node);
+      });
+      
+      downloadBlob(mockBlob, filename);
+      
+      expect(capturedAnchor).not.toBeNull();
+      expect(capturedAnchor?.download).toBe(filename);
+      expect(capturedAnchor?.href).toContain('mock-url');
+    } finally {
+      document.body.appendChild = originalAppendChild;
+    }
   });
 
   it('should revoke object URL after download', () => {
