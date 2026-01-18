@@ -1,5 +1,3 @@
-
-import { GoogleGenAI, Type } from "@google/genai";
 import { AnalysisResult } from "../types";
 
 export const analyzePage = async (imageUri: string): Promise<AnalysisResult> => {
@@ -9,42 +7,35 @@ export const analyzePage = async (imageUri: string): Promise<AnalysisResult> => 
   }
   
   const ai = new GoogleGenAI({ apiKey: import.meta.env.VITE_GEMINI_API_KEY });
+  // Get backend URL from environment variable or use default
+  const backendUrl = import.meta.env.VITE_BACKEND_URL || 'http://localhost:3001';
   
-  // Clean base64 string
-  const base64Data = imageUri.split(',')[1];
+  try {
+    const response = await fetch(`${backendUrl}/api/analyze`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        imageData: imageUri,
+      }),
+    });
 
-  const response = await ai.models.generateContent({
-    model: 'gemini-3-flash-preview',
-    contents: {
-      parts: [
-        {
-          inlineData: {
-            mimeType: 'image/png',
-            data: base64Data,
-          },
-        },
-        {
-          text: 'Analyze this slide/page. Provide a brief summary and exactly 5 relevant keywords. Return as JSON.',
-        },
-      ],
-    },
-    config: {
-      responseMimeType: 'application/json',
-      responseSchema: {
-        type: Type.OBJECT,
-        properties: {
-          summary: { type: Type.STRING },
-          keywords: {
-            type: Type.ARRAY,
-            items: { type: Type.STRING }
-          }
-        },
-        required: ['summary', 'keywords']
-      }
-    },
-  });
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}));
+      throw new Error(
+        errorData.message || `Failed to analyze image: Server error ${response.status}`
+      );
+    }
 
-  const text = response.text;
-  if (!text) throw new Error("Empty response from Gemini");
-  return JSON.parse(text) as AnalysisResult;
+    const result = await response.json();
+    return result as AnalysisResult;
+  } catch (error) {
+    console.error('Failed to analyze page:', error);
+    throw new Error(
+      error instanceof Error 
+        ? error.message 
+        : 'Failed to analyze page. Please ensure the backend service is running.'
+    );
+  }
 };
