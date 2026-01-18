@@ -30,6 +30,7 @@ export const loadPdf = async (file: File): Promise<PdfPageInfo[]> => {
     const [copiedPage] = await subDoc.copyPages(pdfDoc, [i]);
     subDoc.addPage(copiedPage);
     const pdfBytes = await subDoc.save();
+    // Wrap in Uint8Array to satisfy TypeScript's BlobPart type constraint with pdf-lib's Uint8Array<ArrayBufferLike>
     const pdfBlob = new Blob([new Uint8Array(pdfBytes)], { type: 'application/pdf' });
 
     const page = await pdfjsDoc.getPage(i + 1);
