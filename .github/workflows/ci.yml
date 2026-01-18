@@ -33,5 +33,14 @@ jobs:
     - name: Run tests
       run: npm run test:run
     
-    - name: Run build
+    - name: Run build (default)
       run: npm run build
+    
+    - name: Run build (GitHub Pages)
+      run: npm run build
+      env:
+        GITHUB_PAGES: true
+        VITE_GEMINI_API_KEY: disabled
+    
+    - name: Validate GitHub Pages build
+      run: bash scripts/validate-github-pages-build.sh
