@@ -249,11 +249,16 @@ const App: React.FC = () => {
             </div>
             <h2 className="text-2xl md:text-3xl font-bold text-slate-900">Load your PDF</h2>
             <p className="text-slate-500 mt-3 max-w-md text-base md:text-lg leading-relaxed">
-              Extract slides, convert to Word/PPTX{isAIEnabled ? ', or let AI summarize your content' : ''}.
+              {isAIEnabled 
+                ? 'Extract slides, convert to Word/PPTX, or let AI summarize your content.'
+                : 'Extract slides and convert to Word/PPTX.'}
             </p>
             
             <div className="mt-8 md:mt-10 flex flex-wrap justify-center gap-3">
-              {['Batch Operations', 'Local Processing', ...(isAIEnabled ? ['AI Powered'] : [])].map((tag) => (
+              {(isAIEnabled 
+                ? ['Batch Operations', 'Local Processing', 'AI Powered']
+                : ['Batch Operations', 'Local Processing']
+              ).map((tag) => (
                 <span key={tag} className="px-3 py-1 bg-slate-100 text-slate-600 rounded-full text-[10px] md:text-xs font-bold uppercase tracking-wider border border-slate-200">
                   {tag}
                 </span>
