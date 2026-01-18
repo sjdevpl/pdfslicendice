@@ -31,6 +31,9 @@ const App: React.FC = () => {
   const [selectedIndices, setSelectedIndices] = useState<Set<number>>(new Set());
   const fileInputRef = useRef<HTMLInputElement>(null);
 
+  // Check if AI is enabled (not on GitHub Pages demo)
+  const isAIEnabled = import.meta.env.VITE_GEMINI_API_KEY && import.meta.env.VITE_GEMINI_API_KEY !== 'disabled';
+
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFile = e.target.files?.[0];
     if (selectedFile && selectedFile.type === 'application/pdf') {
@@ -162,6 +165,33 @@ const App: React.FC = () => {
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12 pb-44 md:pb-32">
+      {/* Promotional Banner */}
+      {!isAIEnabled && (
+        <div className="mb-6 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-2xl p-4 md:p-6 text-white shadow-xl animate-in slide-in-from-top-4 duration-700">
+          <div className="flex flex-col md:flex-row items-center justify-between gap-4">
+            <div className="flex items-center gap-3 text-center md:text-left">
+              <div className="bg-white/20 backdrop-blur-sm p-3 rounded-xl shrink-0">
+                <Cpu size={24} className="text-white" />
+              </div>
+              <div>
+                <h2 className="font-black text-lg md:text-xl mb-1">🚀 Want AI-Powered Analysis?</h2>
+                <p className="text-blue-100 text-sm md:text-base">
+                  Get intelligent page summaries and keyword extraction with our full app!
+                </p>
+              </div>
+            </div>
+            <a
+              href="https://pdfslicendice.sjdev.pl"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="whitespace-nowrap bg-white text-blue-600 px-6 py-3 rounded-xl font-bold text-sm md:text-base hover:bg-blue-50 transition-all shadow-lg hover:shadow-xl hover:scale-105 flex items-center gap-2 focus-visible:ring-2 focus-visible:ring-white focus-visible:outline-none"
+            >
+              Try Full App
+              <ChevronRight size={20} />
+            </a>
+          </div>
+        </div>
+      )}
       {/* Header */}
       <header className="mb-10 md:mb-16 flex flex-col md:flex-row md:items-end justify-between gap-6">
         <div className="space-y-3">
@@ -219,11 +249,11 @@ const App: React.FC = () => {
             </div>
             <h2 className="text-2xl md:text-3xl font-bold text-slate-900">Load your PDF</h2>
             <p className="text-slate-500 mt-3 max-w-md text-base md:text-lg leading-relaxed">
-              Extract slides, convert to Word/PPTX, or let AI summarize your content.
+              Extract slides, convert to Word/PPTX{isAIEnabled ? ', or let AI summarize your content' : ''}.
             </p>
             
             <div className="mt-8 md:mt-10 flex flex-wrap justify-center gap-3">
-              {['Batch Operations', 'Local Processing', 'AI Powered'].map((tag) => (
+              {['Batch Operations', 'Local Processing', ...(isAIEnabled ? ['AI Powered'] : [])].map((tag) => (
                 <span key={tag} className="px-3 py-1 bg-slate-100 text-slate-600 rounded-full text-[10px] md:text-xs font-bold uppercase tracking-wider border border-slate-200">
                   {tag}
                 </span>
@@ -362,8 +392,9 @@ const App: React.FC = () => {
 
                       <button 
                         onClick={() => handleAIAnalyze(page)}
-                        disabled={processingId !== null || isBatchProcessing}
-                        className="w-full py-3 bg-blue-50/80 hover:bg-blue-100 text-blue-700 rounded-lg font-bold text-[10px] sm:text-xs uppercase tracking-widest transition-all flex items-center justify-center gap-2 border border-blue-100 focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:outline-none"
+                        disabled={!isAIEnabled || processingId !== null || isBatchProcessing}
+                        className="w-full py-3 bg-blue-50/80 hover:bg-blue-100 text-blue-700 rounded-lg font-bold text-[10px] sm:text-xs uppercase tracking-widest transition-all flex items-center justify-center gap-2 border border-blue-100 focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:outline-none disabled:opacity-50 disabled:cursor-not-allowed"
+                        title={!isAIEnabled ? "AI features available in full app" : ""}
                       >
                         <Cpu size={14} />
                         Gemini Insight
@@ -456,8 +487,9 @@ const App: React.FC = () => {
                   
                   <button 
                     onClick={handleBatchAIAnalyze}
-                    disabled={isBatchProcessing}
-                    className="ml-auto md:ml-0 bg-blue-600 hover:bg-blue-500 disabled:opacity-50 text-white px-4 py-2 rounded-xl text-xs font-bold flex items-center gap-2 transition-all shadow-lg active:scale-95 uppercase tracking-widest whitespace-nowrap ring-offset-slate-900 focus-visible:ring-2 focus-visible:ring-blue-400 focus-visible:outline-none"
+                    disabled={!isAIEnabled || isBatchProcessing}
+                    className="ml-auto md:ml-0 bg-blue-600 hover:bg-blue-500 disabled:opacity-50 text-white px-4 py-2 rounded-xl text-xs font-bold flex items-center gap-2 transition-all shadow-lg active:scale-95 uppercase tracking-widest whitespace-nowrap ring-offset-slate-900 focus-visible:ring-2 focus-visible:ring-blue-400 focus-visible:outline-none disabled:cursor-not-allowed"
+                    title={!isAIEnabled ? "AI features available in full app" : ""}
                   >
                     {isBatchProcessing ? <Loader2 className="animate-spin" size={14} /> : <Cpu size={14} />}
                     AI Batch

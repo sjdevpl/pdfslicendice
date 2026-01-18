@@ -3,6 +3,11 @@ import { GoogleGenAI, Type } from "@google/genai";
 import { AnalysisResult } from "../types";
 
 export const analyzePage = async (imageUri: string): Promise<AnalysisResult> => {
+  // Check if API key is available and not disabled
+  if (!import.meta.env.VITE_GEMINI_API_KEY || import.meta.env.VITE_GEMINI_API_KEY === 'disabled') {
+    throw new Error("AI features are not available in this version. Please visit https://pdfslicendice.sjdev.pl for the full app.");
+  }
+  
   const ai = new GoogleGenAI({ apiKey: import.meta.env.VITE_GEMINI_API_KEY });
   
   // Clean base64 string
