@@ -1,0 +1,7 @@
+{
+  "name": "PDF Slice & Dice",
+  "description": "A high-performance tool to split PDF pages and convert them into images, Word documents, or PowerPoint presentations with AI-powered insights.",
+  "requestFramePermissions": [
+    "camera"
+  ]
+}

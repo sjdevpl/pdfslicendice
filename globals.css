@@ -1,0 +1,60 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --brand-blue: 37, 99, 235;
+  }
+  
+  body {
+    @apply bg-[#f8fafc] text-slate-900 font-sans antialiased;
+    background-image: radial-gradient(#cbd5e1 1px, transparent 1px);
+    background-size: 32px 32px;
+  }
+
+  /* Custom Scrollbar */
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    @apply bg-slate-300 rounded-full hover:bg-slate-400;
+  }
+  
+  /* Hide scrollbar for clean horizontal scrolling areas */
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+}
+
+@layer components {
+  /* Base accessible button class with high-contrast focus rings */
+  .dice-btn {
+    @apply inline-flex items-center justify-center gap-2 transition-all duration-200 select-none cursor-pointer focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-blue-500/40 disabled:opacity-50 disabled:cursor-not-allowed disabled:shadow-none active:scale-[0.98];
+  }
+
+  .dice-button-primary {
+    @apply dice-btn px-6 py-3.5 bg-blue-600 text-white rounded-xl font-bold shadow-lg shadow-blue-600/20 hover:bg-blue-700 hover:-translate-y-0.5 hover:shadow-blue-600/30 active:translate-y-0;
+  }
+  
+  .dice-button-secondary {
+    @apply dice-btn px-5 py-3 border border-slate-200 bg-white text-slate-700 rounded-xl font-semibold shadow-sm hover:bg-slate-50 hover:text-slate-900 hover:border-slate-300 hover:shadow-md;
+  }
+
+  .dice-card {
+    @apply relative bg-white border border-slate-200 rounded-2xl shadow-sm transition-all duration-300 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-blue-500/50 hover:shadow-xl hover:border-blue-200/50;
+  }
+
+  /* Utility for action buttons inside cards - optimized for touch targets */
+  .dice-action-btn {
+    @apply flex flex-col md:flex-row items-center justify-center gap-1.5 py-3 px-2 border border-slate-100 bg-slate-50/50 text-slate-600 rounded-lg hover:bg-blue-50 hover:text-blue-700 hover:border-blue-200 hover:shadow-sm transition-all text-[10px] font-bold uppercase tracking-widest focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-inset cursor-pointer disabled:opacity-50;
+  }
+}
