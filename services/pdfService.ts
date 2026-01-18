@@ -5,16 +5,35 @@ import pptxgen from 'pptxgenjs';
 import { PdfPageInfo } from '../types';
 
 /**
- * Modern bundler-friendly way to load the worker from the local node_modules.
+ * Configure PDF.js worker
+ * In test environments, use a local file path to avoid HTTP protocol errors
  */
-try {
-  pdfjs.GlobalWorkerOptions.workerSrc = new URL(
-    'pdfjs-dist/build/pdf.worker.mjs',
-    import.meta.url
-  ).toString();
-} catch (e) {
-  // Fallback for environments where import.meta.url might fail
-  pdfjs.GlobalWorkerOptions.workerSrc = `https://unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.mjs`;
+const isTestEnv = typeof process !== 'undefined' && (
+  process.env.NODE_ENV === 'test' ||
+  process.env.VITEST !== undefined
+);
+
+if (isTestEnv) {
+  // Test environment - use URL-based path (works in ESM)
+  try {
+    pdfjs.GlobalWorkerOptions.workerSrc = new URL(
+      '../node_modules/pdfjs-dist/build/pdf.worker.mjs',
+      import.meta.url
+    ).toString();
+  } catch (e) {
+    // Fallback: use unpkg (will show warning but tests should work)
+    pdfjs.GlobalWorkerOptions.workerSrc = `https://unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.mjs`;
+  }
+} else {
+  try {
+    pdfjs.GlobalWorkerOptions.workerSrc = new URL(
+      'pdfjs-dist/build/pdf.worker.mjs',
+      import.meta.url
+    ).toString();
+  } catch (e) {
+    // Fallback for environments where import.meta.url might fail
+    pdfjs.GlobalWorkerOptions.workerSrc = `https://unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.mjs`;
+  }
 }
 
 export const loadPdf = async (file: File): Promise<PdfPageInfo[]> => {

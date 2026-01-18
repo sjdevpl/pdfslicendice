@@ -43,4 +43,39 @@ jobs:
         VITE_GEMINI_API_KEY: disabled
     
     - name: Validate GitHub Pages build
-      run: bash scripts/validate-github-pages-build.sh
+      run: |
+        echo "Checking build output structure..."
+        test -d dist || (echo "ERROR: dist directory not found" && exit 1)
+        test -f dist/index.html || (echo "ERROR: dist/index.html not found" && exit 1)
+        
+        echo ""
+        echo "Checking asset paths in HTML..."
+        # Extract repository name from git remote
+        REPO_NAME=$(git remote get-url origin | sed -E 's/.*github.com[\/:]([^\/]+)\/([^\/]+)\.git/\2/' | tr '[:upper:]' '[:lower:]')
+        echo "Repository name: $REPO_NAME"
+        
+        # Check that HTML contains correct base path
+        if ! grep -q "href=\"/${REPO_NAME}/" dist/index.html && ! grep -q "src=\"/${REPO_NAME}/" dist/index.html; then
+          echo "ERROR: HTML does not contain base path /${REPO_NAME}/"
+          echo "Asset references found:"
+          grep -E "(href|src)=\"/" dist/index.html | head -5
+          exit 1
+        fi
+        
+        # Check that assets directory exists
+        if [ ! -d "dist/assets" ]; then
+          echo "ERROR: dist/assets directory not found"
+          exit 1
+        fi
+        
+        # Verify asset files exist
+        ASSET_COUNT=$(find dist/assets -type f | wc -l)
+        if [ "$ASSET_COUNT" -eq 0 ]; then
+          echo "ERROR: No asset files found in dist/assets"
+          exit 1
+        fi
+        
+        echo "✅ Build validation passed"
+        echo "   - HTML file exists"
+        echo "   - Base path /${REPO_NAME}/ is used"
+        echo "   - Assets directory exists with $ASSET_COUNT files"

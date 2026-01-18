@@ -23,6 +23,19 @@ npm run test:ui
 
 # Run tests with coverage
 npm run test:coverage
+
+# Generate test PDF from README.md
+npm run test:generate-pdf
+```
+
+## Test Fixtures
+
+The `fixtures/` directory contains test files used by the test suite:
+- `test.pdf` - A multi-page PDF generated from README.md, useful for testing PDF loading, page extraction, and conversion features
+
+To regenerate the test PDF after updating README.md:
+```bash
+npm run test:generate-pdf
 ```
 
 ## Test Structure
@@ -30,6 +43,7 @@ npm run test:coverage
 - `types.test.ts` - Tests for TypeScript types and enums
 - `pdfService.test.ts` - Tests for PDF service utility functions
 - `App.test.tsx` - Component tests for the main App component
+- `fixtures/test.pdf` - Test PDF file generated from README.md for integration testing
 
 ## Test Coverage
 
