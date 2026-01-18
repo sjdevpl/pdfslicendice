@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
+import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import App from '../App';
 
@@ -16,13 +16,6 @@ vi.mock('../services/geminiService', () => ({
 }));
 
 describe('App Component', () => {
-  const originalEnv = import.meta.env.VITE_GEMINI_API_KEY;
-
-  afterEach(() => {
-    // Restore original env
-    import.meta.env.VITE_GEMINI_API_KEY = originalEnv;
-  });
-
   it('should render the app title', () => {
     render(<App />);
     expect(screen.getByText(/SLICE/i)).toBeInTheDocument();
@@ -54,7 +47,7 @@ describe('App Component', () => {
 
   describe('when AI is enabled', () => {
     beforeEach(() => {
-      import.meta.env.VITE_GEMINI_API_KEY = 'test-api-key';
+      vi.stubEnv('VITE_GEMINI_API_KEY', 'test-api-key');
     });
 
     it('should show AI-enabled description text', () => {
@@ -77,7 +70,7 @@ describe('App Component', () => {
 
   describe('when AI is disabled', () => {
     beforeEach(() => {
-      import.meta.env.VITE_GEMINI_API_KEY = 'disabled';
+      vi.stubEnv('VITE_GEMINI_API_KEY', 'disabled');
     });
 
     it('should show non-AI description text', () => {
