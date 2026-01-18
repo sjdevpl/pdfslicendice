@@ -65,4 +65,31 @@ The Gemini API key is stored **only** on the backend server and never exposed to
 - Unauthorized API usage
 - Key theft from client-side code
 
+1. Install dependencies:
+   `npm install`
+2. Set the `VITE_GEMINI_API_KEY` in `.env.local` to your Gemini API key (copy from `.env.local.template`)
+3. Run the app:
+   `npm run dev`
+
+## Testing
+
+This project includes a comprehensive test suite using Vitest and React Testing Library.
+
+**Run tests:**
+```bash
+npm test          # Run tests in watch mode
+npm run test:run  # Run tests once
+npm run test:ui   # Run tests with UI
+```
+
+Tests are automatically run on every push and pull request via GitHub Actions CI.
+
+See [tests/README.md](tests/README.md) for more details.
+
+## Building
+
+Build the production version:
+```bash
+npm run build
+```
 All core PDF features work offline without requiring the backend.
