@@ -1,6 +1,11 @@
 import { AnalysisResult } from "../types";
 
 export const analyzePage = async (imageUri: string): Promise<AnalysisResult> => {
+  // Check if API key is available and not disabled
+  if (!import.meta.env.VITE_GEMINI_API_KEY || import.meta.env.VITE_GEMINI_API_KEY === 'disabled') {
+    throw new Error("AI features are not available in this version. Please visit https://pdfslicendice.sjdev.pl for the full app.");
+  }
+  
   // Get backend URL from environment variable or use default
   const backendUrl = import.meta.env.VITE_BACKEND_URL || 'http://localhost:3001';
   
