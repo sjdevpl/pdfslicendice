@@ -40,13 +40,24 @@ jobs:
           VITE_GEMINI_API_KEY: disabled
           GITHUB_PAGES: true
 
+      - name: Verify build output
+        run: |
+          echo "Build output structure:"
+          ls -la dist/
+          echo ""
+          echo "Assets folder contents:"
+          ls -la dist/assets/ || echo "No assets folder found"
+          echo ""
+          echo "Checking HTML file for asset references:"
+          cat dist/index.html | grep -E "(href|src)" | head -10
+
       - name: Setup Pages
         uses: actions/configure-pages@v4
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: './dist'
+          path: 'dist'
 
   deploy:
     environment:
